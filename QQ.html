@@ -3,894 +3,947 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Learn HTML step by step — from basics to advanced. Live editor, AI tutor, and interactive terminal.">
+<meta name="description" content="Learn HTML step by step — from basics to advanced, with live editor and AI tutor.">
 <title>HTMLcraft — Learn HTML Step by Step</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ════════════════════════════════════════════
-   TOKENS
-════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
 :root {
-  --bg:        #0f1117;
-  --bg2:       #161820;
-  --bg3:       #1e2030;
-  --bg4:       #252840;
-  --border:    rgba(255,255,255,0.08);
-  --border2:   rgba(255,255,255,0.14);
-  --text:      #e8eaf0;
-  --text2:     #9aa0b8;
-  --text3:     #5a6080;
-  --accent:    #e8562a;
-  --accent2:   #ff7a50;
-  --accent-bg: rgba(232,86,42,0.12);
-  --teal:      #2dd4a0;
-  --teal-bg:   rgba(45,212,160,0.1);
-  --purple:    #818cf8;
-  --amber:     #fbbf24;
-  --red:       #f87171;
-  --font:      'Inter', sans-serif;
-  --mono:      'JetBrains Mono', monospace;
-  --nav-h:     64px;
-  --sidebar-w: 272px;
-  --r:         8px;
-  --r2:        14px;
+  --cream:   #faf7f2;
+  --cream2:  #f3ede3;
+  --cream3:  #ebe3d4;
+  --ink:     #1a1612;
+  --ink2:    #3d3730;
+  --ink3:    #6b6259;
+  --coral:   #e8562a;
+  --coral2:  #f07a55;
+  --coral-bg:#fff1ec;
+  --teal:    #0d7c72;
+  --teal-bg: #e8f6f4;
+  --amber:   #c27c0e;
+  --amber-bg:#fef8ea;
+  --purple:  #5b4fcf;
+  --purple-bg:#f0effe;
+  --border:  rgba(26,22,18,0.1);
+  --border2: rgba(26,22,18,0.18);
+  --shadow:  0 2px 16px rgba(26,22,18,0.08);
+  --shadow2: 0 8px 40px rgba(26,22,18,0.12);
+  --font-head: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius:  10px;
+  --radius2: 16px;
+  --sidebar-w: 268px;
+  --top-h: 58px;
 }
+
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ════════════════════════════════════════════
-   NAVBAR  (matches screenshot style)
-════════════════════════════════════════════ */
-.navbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: var(--nav-h);
-  background: rgba(15,17,23,0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* ═══════════════════════════════════════════
+   TOP PROGRESS RIBBON
+═══════════════════════════════════════════ */
+.top-ribbon {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; z-index: 200;
+  background: var(--cream3);
+}
+.top-ribbon-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--coral), var(--amber));
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ═══════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════ */
+.topbar {
+  position: fixed; top: 3px; left: 0; right: 0; z-index: 100;
+  height: var(--top-h);
+  background: rgba(250,247,242,0.92);
+  backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center;
-  padding: 0 40px; gap: 16px;
+  padding: 0 20px; gap: 16px;
 }
-.nav-logo {
-  font-size: 20px; font-weight: 700; color: var(--text);
-  letter-spacing: -0.3px; white-space: nowrap;
-  cursor: pointer; transition: color 0.15s;
-}
-.nav-logo:hover { color: var(--accent2); }
-.nav-logo span { color: var(--accent); }
-.nav-links {
-  margin-left: auto; display: flex; align-items: center; gap: 4px;
-}
-.nav-link {
-  font-size: 14px; font-weight: 500; color: var(--text2);
-  padding: 7px 14px; border-radius: 6px;
-  cursor: pointer; transition: all 0.15s; border: none; background: none;
-  white-space: nowrap;
-}
-.nav-link:hover { color: var(--text); background: var(--bg3); }
-.nav-link.active { color: var(--text); }
-.nav-cta {
-  font-size: 13px; font-weight: 600; color: white;
-  background: var(--accent); border: none;
-  padding: 8px 18px; border-radius: 6px;
-  cursor: pointer; transition: all 0.2s; margin-left: 8px;
-}
-.nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
 .hamburger {
   display: none; background: none; border: 1px solid var(--border);
-  border-radius: 6px; color: var(--text2); cursor: pointer;
+  border-radius: 8px; color: var(--ink); cursor: pointer;
   padding: 7px; align-items: center; justify-content: center;
-  transition: all 0.15s; margin-left: auto;
+  transition: background 0.15s;
 }
-.hamburger:hover { border-color: var(--border2); color: var(--text); }
-.nav-progress {
+.hamburger:hover { background: var(--cream2); }
+.logo {
+  font-family: var(--font-head); font-size: 20px; font-weight: 800;
+  letter-spacing: -0.5px; color: var(--ink);
+  display: flex; align-items: center; gap: 2px;
+}
+.logo-tag { color: var(--coral); }
+.topbar-center { flex: 1; display: flex; align-items: center; justify-content: center; }
+.topbar-steps {
+  display: flex; align-items: center; gap: 3px;
+}
+.ts-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cream3); cursor: pointer;
+  transition: all 0.2s;
+}
+.ts-dot.done { background: var(--coral2); }
+.ts-dot.active { background: var(--coral); width: 20px; border-radius: 3px; }
+.ts-dot:hover { background: var(--coral2); }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.progress-chip {
   display: flex; align-items: center; gap: 8px;
-  font-family: var(--mono); font-size: 11px; color: var(--text3);
-  padding: 5px 12px; background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 20px; white-space: nowrap;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink3);
+  background: var(--cream2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 5px 12px;
 }
-.np-bar { width: 56px; height: 3px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
-.np-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s; }
-/* ribbon */
-.ribbon { position: fixed; top: 0; left: 0; right: 0; z-index: 201; height: 2px; }
-.ribbon-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--amber)); transition: width 0.5s; width: 0%; }
+.chip-bar { width: 60px; height: 3px; background: var(--cream3); border-radius: 2px; overflow: hidden; }
+.chip-fill { height: 100%; background: var(--coral); border-radius: 2px; transition: width 0.4s; }
 
-/* ════════════════════════════════════════════
-   HERO  (full-screen, dark bg image, centered)
-════════════════════════════════════════════ */
-.hero-section {
-  position: relative;
-  min-height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  text-align: center;
-  overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0; z-index: 0;
-  background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80');
-  background-size: cover; background-position: center;
-  filter: brightness(0.35) saturate(0.7);
-  transform: scale(1.02);
-  transition: transform 8s ease;
-}
-.hero-section:hover .hero-bg { transform: scale(1.05); }
-.hero-overlay {
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(
-    to bottom,
-    rgba(15,17,23,0.3) 0%,
-    rgba(15,17,23,0.1) 40%,
-    rgba(15,17,23,0.5) 80%,
-    rgba(15,17,23,0.95) 100%
-  );
-}
-.hero-content {
-  position: relative; z-index: 2;
-  padding: 0 24px;
-  max-width: 720px;
-  animation: heroIn 0.9s ease;
-}
-@keyframes heroIn {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.hero-kicker {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: var(--mono); font-size: 11px; font-weight: 500;
-  color: var(--teal); background: var(--teal-bg);
-  border: 1px solid rgba(45,212,160,0.25);
-  border-radius: 20px; padding: 5px 14px; margin-bottom: 28px;
-  letter-spacing: 0.05em;
-}
-.hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
-.hero-h1 {
-  font-size: clamp(36px, 6vw, 72px);
-  font-weight: 700; line-height: 1.08;
-  letter-spacing: -1.5px; color: white;
-  margin-bottom: 20px;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
-}
-.hero-h1 em { font-style: normal; color: var(--accent2); }
-.hero-sub {
-  font-size: clamp(15px, 2vw, 18px); color: rgba(255,255,255,0.65);
-  line-height: 1.7; max-width: 500px; margin: 0 auto 36px;
-}
-.hero-sub code {
-  font-family: var(--mono); font-size: 13px;
-  background: rgba(255,255,255,0.1); border-radius: 4px;
-  padding: 1px 7px; color: var(--teal);
-}
-.hero-btns { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-.btn-hero {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 15px; font-weight: 600; color: white;
-  background: var(--accent); border: none;
-  padding: 14px 32px; border-radius: var(--r);
-  cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 24px rgba(232,86,42,0.4);
-}
-.btn-hero:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,86,42,0.5); }
-.btn-hero-ghost {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.75);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 13px 24px; border-radius: var(--r);
-  cursor: pointer; transition: all 0.2s;
-}
-.btn-hero-ghost:hover { background: rgba(255,255,255,0.14); color: white; border-color: rgba(255,255,255,0.3); }
-.hero-stats {
-  display: flex; align-items: center; justify-content: center;
-  gap: 40px; margin-top: 56px; padding-top: 40px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-.h-stat { text-align: center; }
-.h-stat-n { font-size: 32px; font-weight: 700; color: white; display: block; line-height: 1; }
-.h-stat-l { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 5px; display: block; letter-spacing: 0.1em; text-transform: uppercase; }
-/* scroll indicator */
-.scroll-hint {
-  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px;
-  font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.3);
-  letter-spacing: 0.1em; animation: bounce 2.5s ease-in-out infinite;
-}
-@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
-.scroll-hint svg { opacity: 0.4; }
-
-/* ════════════════════════════════════════════
-   TRACKS SECTION (below hero)
-════════════════════════════════════════════ */
-.tracks-section {
-  padding: 80px 40px;
-  max-width: 1100px; margin: 0 auto;
-}
-.section-label {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--text3); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 10px;
-}
-.section-label::after { content:''; flex:1; height:1px; background: var(--border); }
-.section-h { font-size: 32px; font-weight: 700; letter-spacing: -0.8px; color: var(--text); margin-bottom: 10px; }
-.section-sub { font-size: 15px; color: var(--text2); line-height: 1.65; margin-bottom: 48px; }
-.track-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-}
-.track-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--r2); padding: 28px 24px;
-  cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
-}
-.track-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  border-radius: var(--r2) var(--r2) 0 0;
-}
-.track-card.tc-basics::before { background: var(--teal); }
-.track-card.tc-inter::before  { background: var(--amber); }
-.track-card.tc-adv::before    { background: var(--purple); }
-.track-card:hover { border-color: var(--border2); transform: translateY(-3px); background: var(--bg3); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-.tc-num { font-size: 56px; font-weight: 700; color: var(--bg3); line-height: 1; margin-bottom: 14px; }
-.tc-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-.tc-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.tc-meta { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 20px; letter-spacing: 0.05em; }
-.tc-arrow { position: absolute; top: 24px; right: 24px; color: var(--text3); opacity: 0; transition: all 0.2s; }
-.track-card:hover .tc-arrow { opacity: 1; transform: translateX(2px); }
-
-/* ════════════════════════════════════════════
-   SIDEBAR + LESSON LAYOUT
-════════════════════════════════════════════ */
-.app-layout { display: flex; min-height: 100vh; padding-top: var(--nav-h); }
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
 .sidebar-overlay {
   display: none; position: fixed; inset: 0; z-index: 89;
-  background: rgba(0,0,0,0.6); backdrop-filter: blur(3px);
-  opacity: 0; transition: opacity 0.28s;
+  background: rgba(26,22,18,0.4); backdrop-filter: blur(2px);
+  opacity: 0; transition: opacity 0.3s;
 }
 .sidebar-overlay.visible { opacity: 1; }
 .sidebar {
-  position: fixed; top: var(--nav-h); left: 0;
+  position: fixed; top: calc(3px + var(--top-h)); left: 0;
   width: var(--sidebar-w);
-  height: calc(100vh - var(--nav-h));
-  background: var(--bg2); border-right: 1px solid var(--border);
-  overflow-y: auto; z-index: 90;
-  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  height: calc(100vh - 3px - var(--top-h));
+  background: var(--cream); border-right: 1px solid var(--border);
+  overflow-y: auto; z-index: 90; transition: transform 0.28s ease;
 }
 .sidebar::-webkit-scrollbar { width: 3px; }
-.sidebar::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
-.sb-head { padding: 18px 18px 10px; border-bottom: 1px solid var(--border); }
-.sb-head-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); }
-.sb-group { padding: 8px 0 4px; }
-.sb-group-label {
-  display: flex; align-items: center; gap: 7px;
-  padding: 5px 18px 6px;
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3);
+.sidebar::-webkit-scrollbar-thumb { background: var(--cream3); }
+.sb-header {
+  padding: 20px 18px 12px;
+  border-bottom: 1px solid var(--border);
 }
-.sb-group-bar { flex: 1; height: 1px; background: var(--border); }
+.sb-title {
+  font-family: var(--font-mono); font-size: 10px;
+  font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink3);
+}
+.sb-section { padding: 10px 0 4px; }
+.sb-level {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 18px 4px;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3);
+}
+.sb-level-bar { flex: 1; height: 1px; background: var(--border); }
 .sb-item {
   display: flex; align-items: center; gap: 10px;
   padding: 8px 18px; cursor: pointer;
-  font-size: 13px; color: var(--text2);
+  font-size: 13px; color: var(--ink2);
   border-left: 2px solid transparent;
   transition: all 0.15s; user-select: none;
 }
-.sb-item:hover { color: var(--text); background: var(--bg3); }
-.sb-item.active { color: var(--accent2); border-left-color: var(--accent); background: var(--accent-bg); }
-.sb-item.done .sb-n { color: var(--teal); }
-.sb-n { font-family: var(--mono); font-size: 10px; color: var(--bg4); min-width: 20px; font-weight: 500; }
-.sb-ck { margin-left: auto; color: var(--teal); font-size: 11px; opacity: 0; transition: opacity 0.2s; }
-.sb-item.done .sb-ck { opacity: 1; }
+.sb-item:hover { color: var(--ink); background: var(--cream2); }
+.sb-item.active { color: var(--coral); border-left-color: var(--coral); background: var(--coral-bg); }
+.sb-item.done .sb-num { color: var(--teal); }
+.sb-num { font-family: var(--font-mono); font-size: 10px; color: var(--cream3); min-width: 20px; }
+.sb-check { margin-left: auto; color: var(--teal); font-size: 12px; opacity: 0; transition: opacity 0.2s; }
+.sb-item.done .sb-check { opacity: 1; }
 
-/* Main content area */
-.main-area {
-  margin-left: var(--sidebar-w); flex: 1;
-  padding: 48px 56px 100px;
-  max-width: calc(100% - var(--sidebar-w));
+/* ═══════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════ */
+.main {
+  margin-left: var(--sidebar-w);
+  padding: calc(3px + var(--top-h) + 40px) 0 100px;
+  min-height: 100vh;
 }
-.page-wrap { max-width: 820px; margin: 0 auto; }
+.page-wrap { max-width: 800px; margin: 0 auto; padding: 0 40px; }
 
-/* ════════════════════════════════════════════
-   LESSON VIEW
-════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero { display: none; }
+.hero.visible { display: block; animation: fadeUp 0.5s ease; }
+
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--coral); background: var(--coral-bg);
+  border: 1px solid rgba(232,86,42,0.2);
+  border-radius: 20px; padding: 5px 12px; margin-bottom: 28px;
+}
+.hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
+
+.hero-h1 {
+  font-family: var(--font-head); font-size: clamp(42px, 6vw, 80px);
+  font-weight: 800; line-height: 1.0; letter-spacing: -2.5px;
+  color: var(--ink); margin-bottom: 22px;
+}
+.hero-h1 em { font-style: normal; color: var(--coral); }
+.hero-h1 .line2 { color: var(--ink3); font-weight: 300; }
+
+.hero-sub {
+  font-size: 17px; color: var(--ink3); line-height: 1.75;
+  max-width: 500px; margin-bottom: 36px;
+}
+.hero-sub code {
+  font-family: var(--font-mono); font-size: 14px;
+  background: var(--cream2); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px; color: var(--coral);
+}
+
+.hero-stats { display: flex; gap: 32px; margin-bottom: 40px; }
+.h-stat-n {
+  font-family: var(--font-head); font-size: 36px;
+  font-weight: 800; color: var(--ink); display: block; line-height: 1;
+}
+.h-stat-l { font-family: var(--font-mono); font-size: 11px; color: var(--ink3); margin-top: 4px; display: block; }
+
+.hero-cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--ink); color: var(--cream);
+  font-family: var(--font-head); font-weight: 700; font-size: 15px;
+  padding: 14px 26px; border-radius: var(--radius); border: none;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+}
+.btn-primary:hover { background: var(--coral); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-body); font-size: 14px; color: var(--ink3);
+  cursor: pointer; background: none; border: none;
+  text-decoration: none; transition: color 0.15s;
+}
+.btn-ghost:hover { color: var(--ink); }
+
+/* Track cards */
+.track-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-top: 56px;
+}
+.track-card {
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius2);
+  padding: 24px 22px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+.track-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--radius2) var(--radius2) 0 0;
+}
+.track-card.t-basics::after { background: var(--teal); }
+.track-card.t-inter::after { background: var(--amber); }
+.track-card.t-adv::after { background: var(--purple); }
+.track-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow2); }
+.track-num {
+  font-family: var(--font-head); font-size: 52px; font-weight: 800;
+  line-height: 1; color: var(--cream2); margin-bottom: 12px;
+}
+.track-title { font-family: var(--font-head); font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.track-desc { font-size: 13px; color: var(--ink3); line-height: 1.55; }
+.track-meta { font-family: var(--font-mono); font-size: 10px; color: var(--ink3); margin-top: 16px; }
+
+/* ═══════════════════════════════════════════
+   LESSON VIEW — STEP BY STEP
+═══════════════════════════════════════════ */
 .lesson-view { display: none; }
 .lesson-view.visible { display: block; animation: fadeUp 0.35s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-.lesson-hd { margin-bottom: 36px; }
-.lesson-meta-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+/* Lesson header */
+.lesson-hd { margin-bottom: 40px; }
+.lesson-meta-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .level-pill {
-  font-family: var(--mono); font-size: 10px; padding: 4px 10px;
-  border-radius: 20px; letter-spacing: 0.06em; font-weight: 500;
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 4px 10px; border-radius: 20px; letter-spacing: 0.06em;
+  font-weight: 500;
 }
-.lp-basics   { background: rgba(45,212,160,0.1);  color: var(--teal);   border: 1px solid rgba(45,212,160,0.2); }
-.lp-inter    { background: rgba(251,191,36,0.1);  color: var(--amber);  border: 1px solid rgba(251,191,36,0.2); }
-.lp-advanced { background: rgba(129,140,248,0.1); color: var(--purple); border: 1px solid rgba(129,140,248,0.2); }
-.lesson-n { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.lp-basics  { background: var(--teal-bg);   color: var(--teal);   border: 1px solid rgba(13,124,114,0.2); }
+.lp-inter   { background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(194,124,14,0.2); }
+.lp-advanced{ background: var(--purple-bg); color: var(--purple); border: 1px solid rgba(91,79,207,0.2); }
+.lesson-n { font-family: var(--font-mono); font-size: 11px; color: var(--ink3); }
+
 .lesson-title {
-  font-size: clamp(28px, 4vw, 48px); font-weight: 700;
-  letter-spacing: -1.2px; line-height: 1.1;
-  margin-bottom: 14px; color: var(--text);
+  font-family: var(--font-head);
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 800; letter-spacing: -1.5px;
+  line-height: 1.08; margin-bottom: 16px; color: var(--ink);
 }
 .lesson-intro {
-  font-size: 16px; color: var(--text2); line-height: 1.75;
-  max-width: 600px; border-left: 3px solid var(--accent);
-  padding-left: 16px;
+  font-size: 16px; color: var(--ink3); line-height: 1.75;
+  max-width: 580px; padding-left: 16px;
+  border-left: 3px solid var(--coral);
 }
 
-/* Step tracker */
+/* Step progress tracker */
 .step-tracker {
   display: flex; align-items: center; gap: 0;
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 40px; padding: 5px 6px; margin-bottom: 36px; width: fit-content;
+  background: var(--cream2); border: 1px solid var(--border);
+  border-radius: 40px; padding: 6px 8px;
+  margin-bottom: 36px; overflow: hidden;
 }
-.sti {
-  display: flex; align-items: center; gap: 7px;
-  padding: 7px 16px; border-radius: 30px;
-  font-size: 12px; font-weight: 500; color: var(--text3);
+.step-tracker-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 30px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink3);
   cursor: pointer; transition: all 0.2s; white-space: nowrap;
 }
-.sti.active { background: var(--accent); color: white; }
-.sti.done { color: var(--teal); }
+.step-tracker-item.active {
+  background: var(--ink); color: var(--cream);
+}
+.step-tracker-item.done { color: var(--teal); }
+.step-tracker-item.done .sti-n { color: var(--teal); }
 .sti-n {
   width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 10px; font-weight: 600;
-  background: rgba(255,255,255,0.07); flex-shrink: 0;
+  font-size: 10px; font-weight: 600;
+  background: rgba(0,0,0,0.06);
 }
-.sti.active .sti-n { background: rgba(255,255,255,0.2); }
+.step-tracker-item.active .sti-n { background: rgba(255,255,255,0.15); }
 
 /* Step panels */
-.step-panel { display: none; animation: fadeUp 0.25s ease; }
+.step-panel { display: none; animation: fadeUp 0.3s ease; }
 .step-panel.active { display: block; }
 
-/* ════════════════════════════════════════════
-   CONTENT BLOCKS
-════════════════════════════════════════════ */
-.section-block { margin: 30px 0; }
+/* ── STEP: LEARN ── */
+.section-block { margin: 28px 0; }
 .section-block h2 {
-  font-size: 20px; font-weight: 700; color: var(--text);
-  margin-bottom: 13px; display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-head); font-size: 22px; font-weight: 700;
+  color: var(--ink); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
 }
 .section-block h2::before {
-  content: ''; display: inline-block; width: 4px; height: 18px;
-  background: var(--accent); border-radius: 2px; flex-shrink: 0;
+  content: ''; display: inline-block;
+  width: 4px; height: 20px; background: var(--coral);
+  border-radius: 2px; flex-shrink: 0;
 }
-.section-block p { font-size: 15px; color: var(--text2); line-height: 1.8; margin-bottom: 12px; }
-.section-block strong { color: var(--text); }
+.section-block p {
+  font-size: 15px; color: var(--ink2); line-height: 1.8; margin-bottom: 12px;
+}
+.section-block strong { color: var(--ink); }
 .section-block code {
-  font-family: var(--mono); font-size: 12.5px;
-  background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 4px; padding: 2px 6px; color: var(--accent2);
+  font-family: var(--font-mono); font-size: 13px;
+  background: var(--cream2); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1px 6px; color: var(--coral);
 }
-.concept-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(185px,1fr)); gap: 10px; margin: 16px 0; }
+
+/* Concept cards */
+.concept-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px; margin: 16px 0;
+}
 .concept-card {
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 16px; transition: border-color 0.15s;
+  background: var(--cream); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  transition: border-color 0.15s;
 }
 .concept-card:hover { border-color: var(--border2); }
-.concept-card h4 { font-family: var(--mono); font-size: 12px; color: var(--accent2); margin-bottom: 7px; }
-.concept-card p { font-size: 13px; color: var(--text2); line-height: 1.5; margin: 0; }
-.tip-block {
-  display: flex; gap: 13px; background: rgba(129,140,248,0.07);
-  border: 1px solid rgba(129,140,248,0.18); border-radius: var(--r);
-  padding: 15px 18px; margin: 20px 0;
+.concept-card h4 {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--coral); margin-bottom: 7px; font-weight: 500;
 }
-.tip-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.tip-block p { font-size: 14px; color: var(--text2); margin: 0; line-height: 1.65; }
+.concept-card p { font-size: 13px; color: var(--ink3); line-height: 1.5; margin: 0; }
+
+/* Tip / warn */
+.tip-block {
+  display: flex; gap: 14px;
+  background: var(--purple-bg); border: 1px solid rgba(91,79,207,0.18);
+  border-radius: var(--radius); padding: 16px 18px; margin: 20px 0;
+}
+.tip-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.tip-block p { font-size: 14px; color: var(--ink2); margin: 0; line-height: 1.65; }
 .tip-block strong { color: var(--purple); }
 .warn-block {
-  display: flex; gap: 13px; background: rgba(251,191,36,0.06);
-  border: 1px solid rgba(251,191,36,0.18); border-radius: var(--r);
-  padding: 15px 18px; margin: 20px 0;
+  display: flex; gap: 14px;
+  background: var(--amber-bg); border: 1px solid rgba(194,124,14,0.2);
+  border-radius: var(--radius); padding: 16px 18px; margin: 20px 0;
 }
-.warn-block p { font-size: 14px; color: var(--text2); margin: 0; line-height: 1.65; }
-.tag-table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--r); border: 1px solid var(--border); }
-.tag-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 420px; }
-.tag-table th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); text-align: left; padding: 9px 14px; background: var(--bg3); border-bottom: 1px solid var(--border); }
-.tag-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
-.tag-table tr:last-child td { border-bottom: none; }
-.tag-table tr:hover td { background: var(--bg3); }
-.tag-table td:first-child { font-family: var(--mono); font-size: 12px; color: var(--accent2); white-space: nowrap; }
+.warn-block p { font-size: 14px; color: var(--ink2); margin: 0; line-height: 1.65; }
 
-/* ════════════════════════════════════════════
-   CODE EDITOR
-════════════════════════════════════════════ */
-.editor-block {
-  border: 1px solid var(--border); border-radius: var(--r2);
-  overflow: hidden;
+/* Tag table */
+.tag-table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+.tag-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 420px; }
+.tag-table th {
+  font-family: var(--font-mono); font-size: 10px; color: var(--ink3);
+  text-align: left; padding: 9px 14px;
+  background: var(--cream2); border-bottom: 1px solid var(--border);
+  letter-spacing: 0.08em; text-transform: uppercase;
 }
-.ed-topbar {
-  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
-  background: var(--bg3); border-bottom: 1px solid var(--border);
+.tag-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--ink2); vertical-align: top; }
+.tag-table tr:last-child td { border-bottom: none; }
+.tag-table tr:hover td { background: var(--cream2); }
+.tag-table td:first-child { font-family: var(--font-mono); font-size: 12px; color: var(--coral); white-space: nowrap; }
+
+/* ── STEP: PRACTICE — CODE EDITOR ── */
+.editor-block {
+  border: 1.5px solid var(--border); border-radius: var(--radius2);
+  overflow: hidden; box-shadow: var(--shadow);
+}
+.editor-topbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px;
+  background: var(--ink); color: var(--cream);
 }
 .ed-dots { display: flex; gap: 5px; }
 .ed-dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot-r{background:#ff5f57} .dot-y{background:#ffbd2e} .dot-g{background:#28c840}
-.ed-title { font-family: var(--mono); font-size: 11px; color: var(--text3); flex: 1; text-align: center; }
-.ed-run { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px; color: var(--teal); background: var(--teal-bg); border: 1px solid rgba(45,212,160,0.2); border-radius: 5px; padding: 4px 10px; cursor: pointer; transition: all 0.15s; }
-.ed-run:hover { background: rgba(45,212,160,0.15); }
-.ed-tabs-mob { display: none; background: var(--bg3); border-bottom: 1px solid var(--border); }
-.ed-tab-m { flex: 1; padding: 8px; font-family: var(--mono); font-size: 11px; color: var(--text3); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.15s; }
-.ed-tab-m.active { color: var(--accent2); border-bottom-color: var(--accent2); }
-.ed-body { display: grid; grid-template-columns: 1fr 1fr; }
+.ed-dot-r { background: #ff5f57; } .ed-dot-y { background: #ffbd2e; } .ed-dot-g { background: #28c840; }
+.ed-file {
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(255,255,255,0.35); flex: 1; text-align: center;
+}
+.ed-run-btn {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: #2dd4a0; background: rgba(45,212,160,0.1);
+  border: 1px solid rgba(45,212,160,0.25);
+  border-radius: 5px; padding: 4px 10px; cursor: pointer;
+  transition: all 0.15s;
+}
+.ed-run-btn:hover { background: rgba(45,212,160,0.18); }
+.editor-tabs-mobile {
+  display: none; background: var(--ink2);
+}
+.ed-tab-btn {
+  flex: 1; padding: 8px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(255,255,255,0.3); background: none; border: none;
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s;
+}
+.ed-tab-btn.active { color: var(--coral2); border-bottom-color: var(--coral2); }
+.editor-body { display: grid; grid-template-columns: 1fr 1fr; }
 .ed-pane { display: flex; flex-direction: column; }
 .ed-pane:first-child { border-right: 1px solid var(--border); }
-.ed-pane-lbl { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); padding: 6px 14px; background: var(--bg2); border-bottom: 1px solid var(--border); }
-.code-ta { width: 100%; min-height: 200px; font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--text); background: var(--bg); border: none; outline: none; padding: 14px 16px; resize: vertical; tab-size: 2; }
-.prev-frame { width: 100%; min-height: 200px; border: none; background: white; }
+.ed-pane-label {
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 7px 14px; background: var(--cream2); border-bottom: 1px solid var(--border);
+}
+.code-textarea {
+  width: 100%; min-height: 200px; flex: 1;
+  font-family: var(--font-mono); font-size: 13px; line-height: 1.7;
+  color: var(--ink); background: var(--cream);
+  border: none; outline: none; padding: 14px 16px;
+  resize: vertical; tab-size: 2;
+}
+.preview-iframe { width: 100%; min-height: 200px; border: none; background: white; }
 
-/* ════════════════════════════════════════════
-   QUIZ
-════════════════════════════════════════════ */
-.quiz-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 28px; }
-.quiz-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--amber); background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2); border-radius: 20px; padding: 4px 12px; margin-bottom: 18px; }
-.quiz-q { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 22px; line-height: 1.4; }
-.quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+/* ── STEP: QUIZ ── */
+.quiz-wrap {
+  background: var(--cream); border: 1.5px solid var(--border);
+  border-radius: var(--radius2); padding: 28px; box-shadow: var(--shadow);
+}
+.quiz-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--amber); background: var(--amber-bg);
+  border: 1px solid rgba(194,124,14,0.2);
+  border-radius: 20px; padding: 4px 10px; margin-bottom: 18px;
+}
+.quiz-q-text { font-family: var(--font-head); font-size: 19px; font-weight: 700; margin-bottom: 22px; line-height: 1.35; }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
 .quiz-opt {
-  display: flex; align-items: center; gap: 12px; padding: 13px 18px;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r);
-  cursor: pointer; font-size: 14px; color: var(--text2); transition: all 0.15s;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; background: var(--cream2);
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  cursor: pointer; font-size: 14px; color: var(--ink2);
+  transition: all 0.15s;
 }
-.quiz-opt:hover { border-color: var(--border2); color: var(--text); }
+.quiz-opt:hover { border-color: var(--ink); color: var(--ink); }
 .quiz-opt.correct { border-color: var(--teal); background: var(--teal-bg); color: var(--teal); }
-.quiz-opt.wrong   { border-color: var(--red); background: rgba(248,113,113,0.08); color: var(--red); }
-.qol { width: 28px; height: 28px; border-radius: 50%; background: var(--bg4); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; font-weight: 600; flex-shrink: 0; transition: all 0.15s; }
-.quiz-opt:hover .qol { border-color: var(--text2); }
-.quiz-opt.correct .qol { border-color: var(--teal); background: var(--teal); color: #0a1a17; }
-.quiz-opt.wrong .qol   { border-color: var(--red); background: var(--red); color: white; }
-.quiz-fb { margin-top: 18px; padding: 13px 16px; border-radius: var(--r); font-size: 13.5px; display: none; }
-.quiz-fb.show { display: flex; align-items: flex-start; gap: 9px; }
-.quiz-fb.ok-fb { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(45,212,160,0.2); }
-.quiz-fb.err-fb { background: rgba(251,191,36,0.08); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
-
-/* ════════════════════════════════════════════
-   NAVIGATION BUTTONS
-════════════════════════════════════════════ */
-.step-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 28px; gap: 12px; flex-wrap: wrap; }
-.s-btn {
-  display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600;
-  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 10px 18px; cursor: pointer; color: var(--text2); transition: all 0.15s;
+.quiz-opt.wrong { border-color: #e53e3e; background: #fff5f5; color: #e53e3e; }
+.quiz-opt-letter {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--cream); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  flex-shrink: 0; transition: all 0.15s;
 }
-.s-btn:hover { border-color: var(--border2); color: var(--text); }
-.s-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
-.s-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
-.s-btn.success { background: var(--teal-bg); color: var(--teal); border-color: rgba(45,212,160,0.25); }
-.lesson-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
-.l-btn { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 11px 20px; cursor: pointer; color: var(--text2); transition: all 0.2s; }
-.l-btn:hover { border-color: var(--border2); color: var(--text); }
-.l-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
-.l-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
-.mark-btn { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--teal); background: var(--teal-bg); border: 1px solid rgba(45,212,160,0.2); border-radius: var(--r); padding: 9px 16px; cursor: pointer; transition: all 0.2s; }
-.mark-btn:hover { background: rgba(45,212,160,0.15); }
-.mark-btn.done { color: var(--text3); background: var(--bg2); border-color: var(--border); cursor: default; }
+.quiz-opt:hover .quiz-opt-letter { border-color: var(--ink); }
+.quiz-opt.correct .quiz-opt-letter { border-color: var(--teal); background: var(--teal); color: white; }
+.quiz-opt.wrong .quiz-opt-letter { border-color: #e53e3e; background: #e53e3e; color: white; }
+.quiz-feedback {
+  margin-top: 20px; padding: 14px 18px;
+  border-radius: var(--radius); font-size: 14px;
+  display: none;
+}
+.quiz-feedback.show { display: flex; gap: 10px; align-items: flex-start; }
+.quiz-feedback.correct-fb { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(13,124,114,0.2); }
+.quiz-feedback.wrong-fb { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(194,124,14,0.2); }
 
-/* ════════════════════════════════════════════
-   AI TUTOR
-════════════════════════════════════════════ */
+/* ── STEP NAV BUTTONS ── */
+.step-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 32px; gap: 12px; flex-wrap: wrap;
+}
+.step-btn {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--font-head); font-size: 13px; font-weight: 600;
+  background: var(--cream2); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 10px 18px;
+  cursor: pointer; color: var(--ink2); transition: all 0.15s;
+}
+.step-btn:hover { border-color: var(--border2); color: var(--ink); background: var(--cream3); }
+.step-btn.primary { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+.step-btn.primary:hover { background: var(--coral); border-color: var(--coral); color: white; }
+.step-btn.success { background: var(--teal); color: white; border-color: var(--teal); }
+.step-btn.success:hover { background: #0a6a61; border-color: #0a6a61; }
+
+/* Lesson bottom nav */
+.lesson-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 48px; padding-top: 28px;
+  border-top: 1px solid var(--border); gap: 12px;
+}
+.lesson-nav-btn {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-head); font-size: 14px; font-weight: 600;
+  background: var(--cream); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 11px 20px;
+  cursor: pointer; color: var(--ink2); transition: all 0.2s;
+}
+.lesson-nav-btn:hover { border-color: var(--border2); color: var(--ink); }
+.lesson-nav-btn.primary { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+.lesson-nav-btn.primary:hover { background: var(--coral); border-color: var(--coral); }
+.mark-done-btn {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--teal); background: var(--teal-bg);
+  border: 1px solid rgba(13,124,114,0.2);
+  border-radius: var(--radius); padding: 9px 16px;
+  cursor: pointer; transition: all 0.2s;
+}
+.mark-done-btn:hover { background: rgba(13,124,114,0.12); }
+.mark-done-btn.done { color: var(--ink3); background: var(--cream2); border-color: var(--border); cursor: default; }
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   AI TUTOR FAB + PANEL
+═══════════════════════════════════════════ */
 .ai-fab {
   position: fixed; bottom: 28px; right: 28px; z-index: 500;
   width: 52px; height: 52px; border-radius: 50%;
-  background: var(--accent); border: none; cursor: pointer;
+  background: var(--ink); border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 24px rgba(232,86,42,0.4); transition: all 0.2s;
+  box-shadow: var(--shadow2); transition: all 0.2s;
 }
-.ai-fab:hover { background: var(--accent2); transform: scale(1.07); }
-.ai-ring { position: absolute; inset: -5px; border-radius: 50%; border: 1.5px solid rgba(232,86,42,0.3); animation: aiRing 2.5s ease-out infinite; }
-@keyframes aiRing { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(1.55);opacity:0} }
+.ai-fab:hover { background: var(--coral); transform: scale(1.06); }
+.ai-fab-ring {
+  position: absolute; inset: -5px; border-radius: 50%;
+  border: 1.5px solid rgba(26,22,18,0.15);
+  animation: ai-pulse 2.5s ease-out infinite;
+}
+@keyframes ai-pulse { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(1.5);opacity:0} }
 .ai-fab svg.ico-chat { display: block; }
-.ai-fab svg.ico-x    { display: none; }
+.ai-fab svg.ico-close { display: none; }
 .ai-fab.open svg.ico-chat { display: none; }
-.ai-fab.open svg.ico-x    { display: block; }
-.ai-badge { position: absolute; top: -2px; right: -2px; background: var(--teal); color: #0a1a17; font-family: var(--mono); font-size: 9px; font-weight: 700; width: 17px; height: 17px; border-radius: 50%; display: none; align-items: center; justify-content: center; border: 2px solid var(--bg); }
+.ai-fab.open svg.ico-close { display: block; }
+.ai-fab-badge {
+  position: absolute; top: -2px; right: -2px;
+  background: var(--coral); color: white;
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  width: 17px; height: 17px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  border: 2px solid var(--cream);
+}
 .ai-panel {
   position: fixed; bottom: 90px; right: 28px; z-index: 499;
-  width: 372px; max-height: 560px; display: flex; flex-direction: column;
-  background: var(--bg2); border: 1px solid var(--border);
-  border-radius: var(--r2);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  transform: scale(0.92) translateY(14px); opacity: 0; pointer-events: none;
+  width: 368px; max-height: 560px;
+  display: flex; flex-direction: column;
+  background: white; border: 1.5px solid var(--border);
+  border-radius: var(--radius2); overflow: hidden;
+  box-shadow: var(--shadow2), 0 0 0 1px rgba(0,0,0,0.03);
+  transform: scale(0.92) translateY(14px); opacity: 0;
+  pointer-events: none;
   transition: all 0.24s cubic-bezier(0.34,1.56,0.64,1);
   transform-origin: bottom right;
 }
 .ai-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
-.ai-ph { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--bg3); border-bottom: 1px solid var(--border); flex-shrink: 0; border-radius: var(--r2) var(--r2) 0 0; }
-.ai-av { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-.ai-ph-name { font-size: 13px; font-weight: 700; color: var(--text); }
-.ai-ph-status { font-family: var(--mono); font-size: 10px; color: var(--text3); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
-.ai-ph-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-.ai-clr { background: var(--bg4); border: 1px solid var(--border); border-radius: 5px; color: var(--text3); font-family: var(--mono); font-size: 10px; padding: 4px 8px; cursor: pointer; margin-left: auto; transition: all 0.15s; }
-.ai-clr:hover { color: var(--text); }
-.ai-ctx { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--teal-bg); border-bottom: 1px solid rgba(45,212,160,0.12); font-family: var(--mono); font-size: 10px; color: var(--teal); flex-shrink: 0; }
+.ai-ph {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; background: var(--ink);
+  flex-shrink: 0;
+}
+.ai-ph-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--coral); display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.ai-ph-name { font-family: var(--font-head); font-size: 13px; font-weight: 700; color: white; }
+.ai-ph-status { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+.ai-ph-dot { width: 5px; height: 5px; border-radius: 50%; background: #2dd4a0; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
+.ai-ph-clear { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: rgba(255,255,255,0.5); font-family: var(--font-mono); font-size: 10px; padding: 4px 8px; cursor: pointer; margin-left: auto; transition: all 0.15s; }
+.ai-ph-clear:hover { color: white; background: rgba(255,255,255,0.15); }
+.ai-ctx { display: flex; align-items: center; gap: 6px; padding: 7px 14px; background: var(--teal-bg); border-bottom: 1px solid rgba(13,124,114,0.15); font-family: var(--font-mono); font-size: 10px; color: var(--teal); flex-shrink: 0; }
 .ai-ctx.hidden { display: none; }
-.ai-setup { padding: 22px; display: flex; flex-direction: column; gap: 13px; }
-.ai-setup h3 { font-size: 15px; font-weight: 700; color: var(--text); }
-.ai-setup p { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.ai-setup p a { color: var(--accent2); text-decoration: none; }
+/* key setup */
+.ai-setup { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.ai-setup h3 { font-family: var(--font-head); font-size: 16px; font-weight: 700; color: var(--ink); }
+.ai-setup p { font-size: 13px; color: var(--ink3); line-height: 1.6; }
+.ai-setup p a { color: var(--coral); text-decoration: none; }
 .ai-setup p a:hover { text-decoration: underline; }
-.ai-kin { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 10px 13px; font-family: var(--mono); font-size: 12px; color: var(--text); outline: none; transition: border-color 0.15s; }
-.ai-kin:focus { border-color: var(--accent); }
-.ai-kin::placeholder { color: var(--text3); }
-.ai-save { background: var(--accent); color: white; border: none; border-radius: var(--r); padding: 11px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
-.ai-save:hover { background: var(--accent2); }
-.ai-note { font-family: var(--mono); font-size: 10px; color: var(--text3); text-align: center; }
+.ai-key-in { width: 100%; background: var(--cream2); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 10px 14px; font-family: var(--font-mono); font-size: 12px; color: var(--ink); outline: none; transition: border-color 0.15s; }
+.ai-key-in:focus { border-color: var(--coral); }
+.ai-key-in::placeholder { color: var(--ink3); opacity: 0.5; }
+.ai-save-btn { background: var(--ink); color: white; border: none; border-radius: var(--radius); padding: 11px; font-family: var(--font-head); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.ai-save-btn:hover { background: var(--coral); }
+.ai-note { font-family: var(--font-mono); font-size: 10px; color: var(--ink3); text-align: center; }
+/* messages */
 .ai-msgs { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
 .ai-msgs::-webkit-scrollbar { width: 3px; }
-.ai-msgs::-webkit-scrollbar-thumb { background: var(--bg4); }
+.ai-msgs::-webkit-scrollbar-thumb { background: var(--cream3); }
 .ai-msg { display: flex; gap: 8px; animation: fadeUp 0.2s ease; }
 .ai-msg.user { flex-direction: row-reverse; }
 .ai-msg-av { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 2px; }
-.ai-msg.assistant .ai-msg-av { background: var(--accent); color: white; font-size: 12px; }
-.ai-msg.user .ai-msg-av { background: var(--bg4); color: var(--text2); font-family: var(--mono); font-size: 9px; font-weight: 700; }
-.ai-bbl { max-width: 80%; padding: 10px 13px; border-radius: 12px; font-size: 13.5px; line-height: 1.65; }
-.ai-msg.assistant .ai-bbl { background: var(--bg3); color: var(--text2); border-bottom-left-radius: 3px; }
-.ai-msg.user .ai-bbl { background: var(--accent-bg); border: 1px solid rgba(232,86,42,0.2); color: var(--text); border-bottom-right-radius: 3px; }
-.ai-bbl code { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,0.07); border-radius: 3px; padding: 1px 5px; color: var(--accent2); }
-.ai-bbl pre { margin: 8px 0 0; background: var(--bg); color: #a8d8a8; border-radius: 6px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; overflow-x: auto; line-height: 1.5; text-align: left; }
-.ai-typing { display: none; gap: 3px; padding: 11px 13px; background: var(--bg3); border-radius: 12px; border-bottom-left-radius: 3px; width: fit-content; }
+.ai-msg.assistant .ai-msg-av { background: var(--ink); color: white; font-size: 13px; }
+.ai-msg.user .ai-msg-av { background: var(--coral-bg); color: var(--coral); font-family: var(--font-mono); font-size: 9px; font-weight: 700; }
+.ai-msg-bbl { max-width: 80%; padding: 10px 13px; border-radius: 12px; font-size: 13.5px; line-height: 1.65; }
+.ai-msg.assistant .ai-msg-bbl { background: var(--cream2); color: var(--ink2); border-bottom-left-radius: 3px; }
+.ai-msg.user .ai-msg-bbl { background: var(--ink); color: var(--cream); border-bottom-right-radius: 3px; }
+.ai-msg-bbl code { font-family: var(--font-mono); font-size: 12px; background: rgba(0,0,0,0.07); border-radius: 3px; padding: 1px 5px; color: var(--coral); }
+.ai-msg-bbl pre { margin: 8px 0 0; background: var(--ink); color: #a8d8a8; border-radius: 6px; padding: 10px 12px; font-family: var(--font-mono); font-size: 12px; overflow-x: auto; line-height: 1.5; text-align: left; }
+.ai-msg.user .ai-msg-bbl pre { background: rgba(255,255,255,0.1); color: #c8e6c8; }
+.ai-typing { display: none; gap: 3px; padding: 11px 14px; background: var(--cream2); border-radius: 12px; border-bottom-left-radius: 3px; width: fit-content; }
 .ai-typing.show { display: flex; }
-.ai-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); animation: typeDot 1.2s ease-in-out infinite; }
+.ai-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ink3); animation: typeDot 1.2s ease-in-out infinite; }
 .ai-typing span:nth-child(2){animation-delay:.2s} .ai-typing span:nth-child(3){animation-delay:.4s}
 @keyframes typeDot { 0%,60%,100%{transform:translateY(0);opacity:.3} 30%{transform:translateY(-5px);opacity:1} }
 .ai-quick { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 8px; }
-.ai-qb { font-family: var(--mono); font-size: 10px; color: var(--accent2); background: var(--accent-bg); border: 1px solid rgba(232,86,42,0.2); border-radius: 20px; padding: 4px 10px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.ai-qb:hover { background: rgba(232,86,42,0.18); }
-.ai-ir { display: flex; align-items: flex-end; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); flex-shrink: 0; }
-.ai-ta { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: var(--font); font-size: 13px; color: var(--text); outline: none; resize: none; min-height: 36px; max-height: 90px; line-height: 1.5; transition: border-color 0.15s; }
-.ai-ta:focus { border-color: var(--accent); }
-.ai-ta::placeholder { color: var(--text3); }
-.ai-send { width: 34px; height: 34px; border-radius: 7px; border: none; background: var(--accent); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
-.ai-send:hover { background: var(--accent2); }
+.ai-q-btn { font-family: var(--font-mono); font-size: 10px; color: var(--coral); background: var(--coral-bg); border: 1px solid rgba(232,86,42,0.2); border-radius: 20px; padding: 4px 10px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.ai-q-btn:hover { background: rgba(232,86,42,0.12); }
+.ai-input-row { display: flex; align-items: flex-end; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.ai-textarea { flex: 1; background: var(--cream2); border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: var(--font-body); font-size: 13px; color: var(--ink); outline: none; resize: none; min-height: 36px; max-height: 90px; line-height: 1.5; transition: border-color 0.15s; }
+.ai-textarea:focus { border-color: var(--coral); }
+.ai-textarea::placeholder { color: var(--ink3); opacity: 0.5; }
+.ai-send { width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--ink); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+.ai-send:hover { background: var(--coral); }
 .ai-send:disabled { opacity: 0.3; cursor: not-allowed; }
 
-/* ════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    TERMINAL
-════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 .term-fab {
   position: fixed; bottom: 28px; left: 28px; z-index: 500;
-  height: 38px; padding: 0 16px; background: var(--bg2);
-  border: 1px solid var(--border); border-radius: 20px;
-  font-family: var(--mono); font-size: 11px; color: var(--text2);
+  height: 38px; padding: 0 16px;
+  background: var(--ink); color: var(--cream);
+  border: none; border-radius: 20px;
+  font-family: var(--font-mono); font-size: 11px;
   cursor: pointer; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.2s;
+  box-shadow: var(--shadow); transition: all 0.2s;
 }
-.term-fab:hover { border-color: var(--teal); color: var(--teal); }
-.t-live { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: blink 1.8s infinite; }
+.term-fab:hover { background: var(--coral); transform: translateY(-1px); }
+.term-live { width: 6px; height: 6px; border-radius: 50%; background: #2dd4a0; animation: blink 1.8s infinite; }
 .term-panel {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 490;
-  height: 0; overflow: hidden; background: var(--bg);
-  border-top: 2px solid var(--accent);
+  height: 0; overflow: hidden;
+  background: var(--ink); border-top: 2px solid var(--coral);
   display: flex; flex-direction: column;
   transition: height 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 .term-panel.open { height: 320px; }
-.t-bar { display: flex; align-items: center; gap: 10px; padding: 0 16px; height: 36px; background: var(--bg2); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.t-dots { display: flex; gap: 5px; }
+.term-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 16px; height: 36px; background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0;
+}
+.term-bar-dots { display: flex; gap: 5px; }
 .td { width: 10px; height: 10px; border-radius: 50%; }
 .tdr{background:#ff5f57} .tdy{background:#ffbd2e} .tdg{background:#28c840;cursor:pointer}
-.t-title { font-family: var(--mono); font-size: 10px; color: var(--text3); flex: 1; text-align: center; letter-spacing: 0.08em; }
-.t-tabs { display: flex; gap: 2px; }
-.ttab { font-family: var(--mono); font-size: 10px; color: var(--text3); background: transparent; border: none; border-radius: 4px; padding: 3px 10px; cursor: pointer; transition: all 0.15s; border-bottom: 2px solid transparent; }
-.ttab.active { color: var(--accent2); border-bottom-color: var(--accent2); }
-.t-close { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 18px; padding: 0 4px; transition: color 0.15s; line-height: 1; }
-.t-close:hover { color: var(--text); }
-.t-body { flex: 1; display: flex; overflow: hidden; min-height: 0; }
-.t-outwrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.t-out { flex: 1; overflow-y: auto; padding: 10px 16px; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; }
-.t-out::-webkit-scrollbar { width: 3px; }
-.t-out::-webkit-scrollbar-thumb { background: var(--bg3); }
+.term-bar-title { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.2); flex: 1; text-align: center; letter-spacing: 0.08em; }
+.term-bar-tabs { display: flex; gap: 2px; }
+.ttab { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.3); background: transparent; border: none; border-radius: 4px; padding: 3px 10px; cursor: pointer; transition: all 0.15s; border-bottom: 2px solid transparent; }
+.ttab.active { color: var(--coral2); border-bottom-color: var(--coral2); }
+.term-close-btn { background: none; border: none; color: rgba(255,255,255,0.2); cursor: pointer; font-size: 18px; padding: 0 4px; transition: color 0.15s; line-height: 1; }
+.term-close-btn:hover { color: rgba(255,255,255,0.6); }
+.term-body { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+.term-out-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.term-out { flex: 1; overflow-y: auto; padding: 10px 16px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; }
+.term-out::-webkit-scrollbar { width: 3px; }
+.term-out::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
 .tl { white-space: pre-wrap; word-break: break-all; }
-.tl.cmd{color:var(--teal)} .tl.cmd::before{content:'$ ';color:rgba(45,212,160,0.4)}
-.tl.info{color:var(--purple)} .tl.ok{color:var(--teal)} .tl.err{color:var(--red)}
-.tl.warn{color:var(--amber)} .tl.dim{color:rgba(255,255,255,0.15)}
-.tl.tag-c{color:var(--accent2)} .tl.plain{color:rgba(255,255,255,0.65)}
-.t-inrow { display: flex; align-items: center; gap: 6px; padding: 6px 16px 8px; flex-shrink: 0; }
-.t-prompt { font-family: var(--mono); font-size: 12.5px; color: rgba(45,212,160,0.45); white-space: nowrap; }
-.t-in { flex: 1; background: transparent; border: none; outline: none; font-family: var(--mono); font-size: 12.5px; color: var(--teal); caret-color: var(--teal); }
-.t-in::placeholder { color: rgba(255,255,255,0.1); }
-.t-prev-pane { width: 44%; border-left: 1px solid var(--border); background: white; display: none; }
-.t-prev-pane.show { display: block; }
-.t-prev-pane iframe { width: 100%; height: 100%; border: none; }
+.tl.cmd { color: #2dd4a0; } .tl.cmd::before { content: '$ '; color: rgba(45,212,160,0.4); }
+.tl.info { color: #7c8cf7; } .tl.ok { color: #2dd4a0; } .tl.err { color: #ff7b7b; }
+.tl.warn { color: #f7c948; } .tl.dim { color: rgba(255,255,255,0.18); }
+.tl.tag-c { color: var(--coral2); } .tl.plain { color: rgba(255,255,255,0.7); }
+.term-in-row { display: flex; align-items: center; gap: 6px; padding: 6px 16px 8px; flex-shrink: 0; }
+.term-prompt-txt { font-family: var(--font-mono); font-size: 12.5px; color: rgba(45,212,160,0.5); white-space: nowrap; }
+.term-in { flex: 1; background: transparent; border: none; outline: none; font-family: var(--font-mono); font-size: 12.5px; color: #2dd4a0; caret-color: #2dd4a0; }
+.term-in::placeholder { color: rgba(255,255,255,0.1); }
+.term-preview-pane { width: 44%; border-left: 1px solid rgba(255,255,255,0.06); background: white; display: none; }
+.term-preview-pane.show { display: block; }
+.term-preview-pane iframe { width: 100%; height: 100%; border: none; }
 
-/* ════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    RESPONSIVE
-════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 @media (max-width: 1024px) {
   :root { --sidebar-w: 240px; }
-  .main-area { padding: 40px 32px 80px; }
-  .tracks-section { padding: 60px 24px; }
+  .page-wrap { padding: 0 28px; }
 }
 @media (max-width: 860px) {
-  .sidebar { transform: translateX(-100%); z-index: 200; width: 280px; box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+  .sidebar { transform: translateX(-100%); z-index: 200; width: 280px; box-shadow: var(--shadow2); }
   .sidebar.open { transform: translateX(0); }
   .sidebar-overlay { display: block; }
-  .main-area { margin-left: 0; max-width: 100%; padding: 32px 24px 80px; }
+  .main { margin-left: 0; }
   .hamburger { display: flex; }
-  .nav-links { display: none; }
+  .topbar-center { display: none; }
   .track-grid { grid-template-columns: 1fr 1fr; }
   .concept-grid { grid-template-columns: 1fr 1fr; }
-  .hero-stats { gap: 24px; flex-wrap: wrap; }
 }
 @media (max-width: 600px) {
-  :root { --nav-h: 56px; }
-  .navbar { padding: 0 16px; }
-  .nav-logo { font-size: 17px; }
-  .nav-progress { display: none; }
-  .hero-h1 { font-size: 32px; letter-spacing: -1px; }
+  :root { --top-h: 52px; }
+  .topbar { padding: 0 14px; }
+  .logo { font-size: 17px; }
+  .progress-chip { display: none; }
+  .page-wrap { padding: 0 16px; }
+  .hero-h1 { font-size: 34px; letter-spacing: -1.5px; }
   .hero-sub { font-size: 14px; }
-  .hero-btns { flex-direction: column; width: 100%; }
-  .btn-hero, .btn-hero-ghost { width: 100%; justify-content: center; }
   .hero-stats { gap: 20px; }
-  .h-stat-n { font-size: 26px; }
-  .tracks-section { padding: 48px 16px; }
+  .h-stat-n { font-size: 28px; }
+  .hero-cta { flex-direction: column; align-items: stretch; }
+  .btn-primary { justify-content: center; }
   .track-grid { grid-template-columns: 1fr; }
-  .lesson-title { font-size: 24px; }
-  .ed-body { grid-template-columns: 1fr; }
+  .lesson-title { font-size: 26px; }
+  .step-tracker { overflow-x: auto; flex-wrap: nowrap; }
+  .editor-body { grid-template-columns: 1fr; }
   .ed-pane { display: none; }
   .ed-pane.active-pane { display: flex; }
-  .ed-tabs-mob { display: flex !important; }
+  .editor-tabs-mobile { display: flex !important; }
   .ed-pane:first-child { border-right: none; border-bottom: 1px solid var(--border); }
   .concept-grid { grid-template-columns: 1fr; }
   .lesson-nav { flex-wrap: wrap; }
-  .lesson-nav .mark-btn { order: 3; width: 100%; justify-content: center; }
+  .lesson-nav .mark-done-btn { order: 3; width: 100%; justify-content: center; }
   .ai-panel { width: calc(100vw - 24px); right: 12px; bottom: 82px; }
   .ai-fab { bottom: 20px; right: 14px; width: 46px; height: 46px; }
-  .term-fab { bottom: 20px; left: 12px; font-size: 10px; height: 34px; }
+  .term-fab { bottom: 20px; left: 12px; font-size: 10px; height: 34px; padding: 0 12px; }
   .term-panel.open { height: 260px; }
-  .step-tracker { overflow-x: auto; }
 }
 @media (max-width: 380px) {
-  .hero-h1 { font-size: 27px; }
-  .lesson-title { font-size: 20px; }
+  .hero-h1 { font-size: 28px; }
+  .lesson-title { font-size: 22px; }
 }
 </style>
 </head>
 <body>
 
-<!-- RIBBON -->
-<div class="ribbon"><div class="ribbon-fill" id="ribbon-fill"></div></div>
+<!-- PROGRESS RIBBON -->
+<div class="top-ribbon"><div class="top-ribbon-fill" id="ribbon-fill"></div></div>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle menu">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
       <line x1="2" y1="5" x2="16" y2="5"/><line x1="2" y1="9" x2="16" y2="9"/><line x1="2" y1="13" x2="16" y2="13"/>
     </svg>
   </button>
-  <div class="nav-logo" onclick="showHome()">&lt;<span>HTML</span>craft/&gt;</div>
-  <div class="nav-links">
-    <button class="nav-link" onclick="showHome()">Home</button>
-    <button class="nav-link" onclick="openLesson(0)">Basics</button>
-    <button class="nav-link" onclick="openLesson(5)">Intermediate</button>
-    <button class="nav-link" onclick="openLesson(10)">Advanced</button>
-    <button class="nav-cta" onclick="openLesson(0)">Get Started</button>
+  <div class="logo">
+    <span class="logo-tag">&lt;</span>HTMLcraft<span class="logo-tag">/&gt;</span>
   </div>
-  <div class="nav-progress" id="nav-progress">
-    <span id="prog-txt">0 / 15</span>
-    <div class="np-bar"><div class="np-fill" id="np-fill" style="width:0%"></div></div>
+  <div class="topbar-center">
+    <div class="topbar-steps" id="topbar-steps"></div>
   </div>
-</nav>
-
-<!-- ══════════ HOME PAGE ══════════ -->
-<div id="home-page">
-
-  <!-- HERO -->
-  <section class="hero-section">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="hero-kicker">
-        <span class="hero-kicker-dot"></span>
-        15 Interactive Lessons · AI-powered · Live Editor
-      </div>
-      <h1 class="hero-h1">Welcome to <em>HTMLcraft</em></h1>
-      <p class="hero-sub">
-        Discover the language of the web and create lasting projects.
-        Learn HTML from your first <code>&lt;tag&gt;</code> to advanced techniques.
-      </p>
-      <div class="hero-btns">
-        <button class="btn-hero" onclick="openLesson(0)">
-          Get Started
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <line x1="2" y1="7.5" x2="13" y2="7.5"/><polyline points="8.5,3 13,7.5 8.5,12"/>
-          </svg>
-        </button>
-        <button class="btn-hero-ghost" onclick="document.getElementById('tracks').scrollIntoView({behavior:'smooth'})">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <polyline points="2,4 6,7 2,10"/><line x1="7" y1="10" x2="12" y2="10"/>
-          </svg>
-          View Curriculum
-        </button>
-      </div>
-      <div class="hero-stats">
-        <div class="h-stat"><span class="h-stat-n">15</span><span class="h-stat-l">Lessons</span></div>
-        <div class="h-stat"><span class="h-stat-n">3</span><span class="h-stat-l">Steps Each</span></div>
-        <div class="h-stat"><span class="h-stat-n">30+</span><span class="h-stat-l">Exercises</span></div>
-        <div class="h-stat"><span class="h-stat-n">AI</span><span class="h-stat-l">Tutor</span></div>
-      </div>
+  <div class="topbar-right">
+    <div class="progress-chip">
+      <span id="prog-text">0 / 15</span>
+      <div class="chip-bar"><div class="chip-fill" id="chip-fill" style="width:0%"></div></div>
     </div>
-    <div class="scroll-hint">
-      <span>scroll</span>
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <polyline points="3,5 7,9 11,5"/>
-      </svg>
+  </div>
+</header>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-header"><div class="sb-title">Course Contents</div></div>
+  <div class="sb-section">
+    <div class="sb-level"><span style="color:var(--teal)">●</span> Basics <div class="sb-level-bar"></div></div>
+    <div class="sb-item" onclick="openLesson(0)" id="nav-0"><span class="sb-num">01</span>HTML Structure<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(1)" id="nav-1"><span class="sb-num">02</span>Headings &amp; Text<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(2)" id="nav-2"><span class="sb-num">03</span>Links &amp; Images<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(3)" id="nav-3"><span class="sb-num">04</span>Lists<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(4)" id="nav-4"><span class="sb-num">05</span>Attributes<span class="sb-check">✓</span></div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-level"><span style="color:var(--amber)">●</span> Intermediate <div class="sb-level-bar"></div></div>
+    <div class="sb-item" onclick="openLesson(5)" id="nav-5"><span class="sb-num">06</span>Tables<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(6)" id="nav-6"><span class="sb-num">07</span>Forms &amp; Inputs<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(7)" id="nav-7"><span class="sb-num">08</span>Semantic HTML5<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(8)" id="nav-8"><span class="sb-num">09</span>Media Elements<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(9)" id="nav-9"><span class="sb-num">10</span>Div &amp; Span Layout<span class="sb-check">✓</span></div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-level"><span style="color:var(--purple)">●</span> Advanced <div class="sb-level-bar"></div></div>
+    <div class="sb-item" onclick="openLesson(10)" id="nav-10"><span class="sb-num">11</span>Meta &amp; SEO<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(11)" id="nav-11"><span class="sb-num">12</span>Accessibility<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(12)" id="nav-12"><span class="sb-num">13</span>Data Attributes<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(13)" id="nav-13"><span class="sb-num">14</span>Canvas &amp; SVG<span class="sb-check">✓</span></div>
+    <div class="sb-item" onclick="openLesson(14)" id="nav-14"><span class="sb-num">15</span>HTML Best Practices<span class="sb-check">✓</span></div>
+  </div>
+  <div style="height:40px"></div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+<div class="page-wrap">
+
+  <!-- ── HERO ── -->
+  <section class="hero visible" id="hero">
+    <div class="hero-kicker">
+      <span class="hero-kicker-dot"></span>
+      15 lessons · Basics to Advanced · AI-powered
+    </div>
+    <h1 class="hero-h1">
+      Learn <em>HTML</em><br>
+      <span class="line2">step by step.</span>
+    </h1>
+    <p class="hero-sub">
+      Master the language of the web — from your first <code>&lt;html&gt;</code> tag to advanced techniques. Guided lessons, live editor, built-in AI tutor.
+    </p>
+    <div class="hero-stats">
+      <div><span class="h-stat-n">15</span><span class="h-stat-l">Lessons</span></div>
+      <div><span class="h-stat-n">3</span><span class="h-stat-l">Steps each</span></div>
+      <div><span class="h-stat-n">30+</span><span class="h-stat-l">Exercises</span></div>
+    </div>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="openLesson(0)">
+        Start Learning
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="7.5" x2="13" y2="7.5"/><polyline points="8.5,3 13,7.5 8.5,12"/></svg>
+      </button>
+      <button class="btn-ghost" onclick="toggleTerminal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="2,4 6,7 2,10"/><line x1="7" y1="10" x2="12" y2="10"/></svg>
+        Open Terminal
+      </button>
+    </div>
+    <div class="track-grid">
+      <div class="track-card t-basics" onclick="openLesson(0)">
+        <div class="track-num">01</div>
+        <div class="track-title">Basics</div>
+        <div class="track-desc">Structure, text, links, images, lists and attributes.</div>
+        <div class="track-meta">5 lessons · Beginner</div>
+      </div>
+      <div class="track-card t-inter" onclick="openLesson(5)">
+        <div class="track-num">02</div>
+        <div class="track-title">Intermediate</div>
+        <div class="track-desc">Tables, forms, semantic HTML, media, layout.</div>
+        <div class="track-meta">5 lessons · Intermediate</div>
+      </div>
+      <div class="track-card t-adv" onclick="openLesson(10)">
+        <div class="track-num">03</div>
+        <div class="track-title">Advanced</div>
+        <div class="track-desc">SEO, accessibility, data attributes, Canvas, SVG.</div>
+        <div class="track-meta">5 lessons · Advanced</div>
+      </div>
     </div>
   </section>
 
-  <!-- TRACKS -->
-  <div id="tracks" class="tracks-section">
-    <div class="section-label">curriculum</div>
-    <h2 class="section-h">Choose your path</h2>
-    <p class="section-sub">Three levels, 5 lessons each. Every lesson follows the same 3-step flow: Learn theory → Practice in the live editor → Test with a quiz.</p>
-    <div class="track-grid">
-      <div class="track-card tc-basics" onclick="openLesson(0)">
-        <div class="tc-num">01</div>
-        <div class="tc-title">Basics</div>
-        <div class="tc-desc">Structure, text, links, images, lists and attributes. Build your first webpage from scratch.</div>
-        <div class="tc-meta">5 lessons · Beginner</div>
-        <div class="tc-arrow">→</div>
-      </div>
-      <div class="track-card tc-inter" onclick="openLesson(5)">
-        <div class="tc-num">02</div>
-        <div class="tc-title">Intermediate</div>
-        <div class="tc-desc">Tables, forms, semantic HTML, media elements, and layout containers.</div>
-        <div class="tc-meta">5 lessons · Intermediate</div>
-        <div class="tc-arrow">→</div>
-      </div>
-      <div class="track-card tc-adv" onclick="openLesson(10)">
-        <div class="tc-num">03</div>
-        <div class="tc-title">Advanced</div>
-        <div class="tc-desc">SEO meta tags, accessibility, data attributes, Canvas, SVG and best practices.</div>
-        <div class="tc-meta">5 lessons · Advanced</div>
-        <div class="tc-arrow">→</div>
-      </div>
-    </div>
-  </div>
+  <!-- ── LESSON VIEW ── -->
+  <div id="lesson-view" class="lesson-view"></div>
 
-</div><!-- /home-page -->
-
-<!-- ══════════ LESSON PAGE ══════════ -->
-<div id="lesson-page" style="display:none">
-
-  <!-- SIDEBAR OVERLAY -->
-  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sb-head"><div class="sb-head-title">Course Contents</div></div>
-    <div class="sb-group">
-      <div class="sb-group-label"><span style="color:var(--teal)">●</span> Basics <div class="sb-group-bar"></div></div>
-      <div class="sb-item" onclick="openLesson(0)" id="nav-0"><span class="sb-n">01</span>HTML Structure<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(1)" id="nav-1"><span class="sb-n">02</span>Headings &amp; Text<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(2)" id="nav-2"><span class="sb-n">03</span>Links &amp; Images<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(3)" id="nav-3"><span class="sb-n">04</span>Lists<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(4)" id="nav-4"><span class="sb-n">05</span>Attributes<span class="sb-ck">✓</span></div>
-    </div>
-    <div class="sb-group">
-      <div class="sb-group-label"><span style="color:var(--amber)">●</span> Intermediate <div class="sb-group-bar"></div></div>
-      <div class="sb-item" onclick="openLesson(5)" id="nav-5"><span class="sb-n">06</span>Tables<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(6)" id="nav-6"><span class="sb-n">07</span>Forms &amp; Inputs<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(7)" id="nav-7"><span class="sb-n">08</span>Semantic HTML5<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(8)" id="nav-8"><span class="sb-n">09</span>Media Elements<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(9)" id="nav-9"><span class="sb-n">10</span>Div &amp; Span Layout<span class="sb-ck">✓</span></div>
-    </div>
-    <div class="sb-group">
-      <div class="sb-group-label"><span style="color:var(--purple)">●</span> Advanced <div class="sb-group-bar"></div></div>
-      <div class="sb-item" onclick="openLesson(10)" id="nav-10"><span class="sb-n">11</span>Meta &amp; SEO<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(11)" id="nav-11"><span class="sb-n">12</span>Accessibility<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(12)" id="nav-12"><span class="sb-n">13</span>Data Attributes<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(13)" id="nav-13"><span class="sb-n">14</span>Canvas &amp; SVG<span class="sb-ck">✓</span></div>
-      <div class="sb-item" onclick="openLesson(14)" id="nav-14"><span class="sb-n">15</span>Best Practices<span class="sb-ck">✓</span></div>
-    </div>
-    <div style="height:40px"></div>
-  </aside>
-
-  <!-- MAIN -->
-  <div class="main-area">
-    <div class="page-wrap">
-      <div id="lesson-view" class="lesson-view"></div>
-    </div>
-  </div>
-
-</div><!-- /lesson-page -->
+</div>
+</main>
 
 <!-- AI FAB -->
-<button class="ai-fab" id="ai-fab" onclick="toggleAI()" aria-label="AI Tutor">
-  <div class="ai-ring"></div>
-  <div class="ai-badge" id="ai-badge">1</div>
-  <svg class="ico-chat" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-  </svg>
-  <svg class="ico-x" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-  </svg>
+<button class="ai-fab" id="ai-fab" onclick="toggleAI()">
+  <div class="ai-fab-ring"></div>
+  <div class="ai-fab-badge" id="ai-badge">1</div>
+  <svg class="ico-chat" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <svg class="ico-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 </button>
 
 <!-- AI PANEL -->
 <div class="ai-panel" id="ai-panel">
   <div class="ai-ph">
-    <div class="ai-av">🤖</div>
+    <div class="ai-ph-avatar">🤖</div>
     <div>
       <div class="ai-ph-name">HTMLcraft AI Tutor</div>
       <div class="ai-ph-status"><span class="ai-ph-dot"></span>Ready to help</div>
     </div>
-    <button class="ai-clr" onclick="clearAIChat()">Clear</button>
+    <button class="ai-ph-clear" onclick="clearAIChat()">Clear</button>
   </div>
-  <div class="ai-ctx hidden" id="ai-ctx">
-    <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="currentColor"/></svg>
-    <span id="ai-ctx-txt"></span>
-  </div>
+  <div class="ai-ctx hidden" id="ai-ctx"><svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="currentColor"/></svg><span id="ai-ctx-txt"></span></div>
   <div class="ai-setup" id="ai-setup">
     <h3>🔑 Enter your API Key</h3>
-    <p>Powered by <strong style="color:var(--text)">Claude API</strong>. Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
-    <input class="ai-kin" type="password" id="ai-key-in" placeholder="sk-ant-api03-…" autocomplete="off">
-    <button class="ai-save" onclick="saveAIKey()">Save &amp; Start Chatting →</button>
-    <div class="ai-note">🔒 Stored in your browser only</div>
+    <p>Uses the <strong>Claude API</strong> to answer your HTML questions. Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></p>
+    <input class="ai-key-in" type="password" id="ai-key-in" placeholder="sk-ant-api03-…" autocomplete="off">
+    <button class="ai-save-btn" onclick="saveAIKey()">Save &amp; Start Chatting →</button>
+    <div class="ai-note">🔒 Stored in browser only — never sent to our servers</div>
   </div>
   <div id="ai-chat" style="display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0">
     <div class="ai-msgs" id="ai-msgs"></div>
     <div style="padding:0 14px 2px"><div class="ai-typing" id="ai-typing"><span></span><span></span><span></span></div></div>
     <div class="ai-quick" id="ai-quick">
-      <button class="ai-qb" onclick="aiQuick('What is the difference between div and span?')">div vs span</button>
-      <button class="ai-qb" onclick="aiQuick('How do I center something in HTML?')">centering</button>
-      <button class="ai-qb" onclick="aiQuick('Explain semantic HTML with examples')">semantic</button>
-      <button class="ai-qb" onclick="aiQuick('What makes good alt text?')">alt text</button>
+      <button class="ai-q-btn" onclick="aiQuick('What is the difference between &lt;div&gt; and &lt;span&gt;?')">div vs span</button>
+      <button class="ai-q-btn" onclick="aiQuick('How do I center something in HTML?')">centering</button>
+      <button class="ai-q-btn" onclick="aiQuick('Explain semantic HTML with examples')">semantic</button>
+      <button class="ai-q-btn" onclick="aiQuick('What makes good alt text?')">alt text</button>
     </div>
-    <div class="ai-ir">
-      <textarea class="ai-ta" id="ai-in" placeholder="Ask anything about HTML…" rows="1"
-        onkeydown="aiKey_(event)" oninput="aiResize(this)"></textarea>
+    <div class="ai-input-row">
+      <textarea class="ai-textarea" id="ai-in" placeholder="Ask anything about HTML…" rows="1" onkeydown="aiKey_(event)" oninput="aiResize(this)"></textarea>
       <button class="ai-send" id="ai-send" onclick="sendAI()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
   </div>
 </div>
 
 <!-- TERMINAL FAB -->
-<button class="term-fab" onclick="toggleTerminal()">
-  <span class="t-live"></span>Terminal
+<button class="term-fab" id="term-fab" onclick="toggleTerminal()">
+  <span class="term-live"></span> Terminal
 </button>
 
 <!-- TERMINAL -->
 <div class="term-panel" id="term-panel">
-  <div class="t-bar">
-    <div class="t-dots">
+  <div class="term-bar">
+    <div class="term-bar-dots">
       <div class="td tdr" onclick="toggleTerminal()" title="Close"></div>
       <div class="td tdy"></div>
       <div class="td tdg" onclick="clearTerm()" title="Clear"></div>
     </div>
-    <span class="t-title">htmlcraft — terminal</span>
-    <div class="t-tabs">
+    <span class="term-bar-title">htmlcraft — terminal</span>
+    <div class="term-bar-tabs">
       <button class="ttab active" id="ttab-shell" onclick="switchTTab('shell')">shell</button>
       <button class="ttab" id="ttab-html" onclick="switchTTab('html')">html runner</button>
     </div>
-    <button class="t-close" onclick="toggleTerminal()">×</button>
+    <button class="term-close-btn" onclick="toggleTerminal()">×</button>
   </div>
-  <div class="t-body">
-    <div class="t-outwrap">
-      <div class="t-out" id="term-out"></div>
-      <div class="t-inrow">
-        <span class="t-prompt">htmlcraft $&nbsp;</span>
-        <input class="t-in" id="term-in" type="text" placeholder="type 'help'…"
-          autocomplete="off" spellcheck="false" onkeydown="termKey(event)">
+  <div class="term-body">
+    <div class="term-out-wrap">
+      <div class="term-out" id="term-out"></div>
+      <div class="term-in-row">
+        <span class="term-prompt-txt">htmlcraft $&nbsp;</span>
+        <input class="term-in" id="term-in" type="text" placeholder="type 'help'…" autocomplete="off" spellcheck="false" onkeydown="termKey(event)">
       </div>
     </div>
-    <div class="t-prev-pane" id="term-prev"><iframe id="term-iframe"></iframe></div>
+    <div class="term-preview-pane" id="term-prev"><iframe id="term-iframe"></iframe></div>
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════ -->
 <!-- LESSONS DATA -->
+<!-- ═══════════════════════════════════════════════════════════ -->
 <script>
 const lessons = [
 {
@@ -1149,28 +1202,15 @@ const lessons = [
 ];
 </script>
 
-<!-- APP LOGIC -->
-<script>
-</script>
-
 <!-- ═══════════════════════════════════════════════════════════ -->
 <!-- APP LOGIC -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <script>
 let current = -1;
 let done = new Set();
-let lessonStep = 0;
+let lessonStep = 0; // 0=learn 1=practice 2=quiz
 
-function showHome() {
-  document.getElementById('home-page').style.display = 'block';
-  document.getElementById('lesson-page').style.display = 'none';
-  current = -1; lessonStep = 0;
-  document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('active'));
-  updateProgress();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (typeof updateAICtx === 'function') updateAICtx();
-}
-
+// ── SIDEBAR ────────────────────────────────────────────────────
 function toggleSidebar() {
   const sb = document.getElementById('sidebar');
   const ov = document.getElementById('sidebar-overlay');
@@ -1184,20 +1224,31 @@ function closeSidebar() {
   document.body.style.overflow = '';
 }
 
+// ── PROGRESS ───────────────────────────────────────────────────
 function updateProgress() {
   const pct = Math.round((done.size / lessons.length) * 100);
-  document.getElementById('prog-txt').textContent = done.size + ' / ' + lessons.length;
-  document.getElementById('np-fill').style.width = pct + '%';
-  const rf = document.getElementById('ribbon-fill');
-  if (rf) rf.style.width = pct + '%';
+  document.getElementById('prog-text').textContent = done.size + ' / ' + lessons.length;
+  document.getElementById('chip-fill').style.width = pct + '%';
+  document.getElementById('ribbon-fill').style.width = pct + '%';
 }
 
+function buildTopSteps() {
+  const wrap = document.getElementById('topbar-steps');
+  wrap.innerHTML = '';
+  lessons.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'ts-dot' + (done.has(i) ? ' done' : '') + (i === current ? ' active' : '');
+    d.title = lessons[i].title;
+    d.onclick = () => openLesson(i);
+    wrap.appendChild(d);
+  });
+}
+
+// ── OPEN LESSON ────────────────────────────────────────────────
 function openLesson(idx) {
-  current = idx; lessonStep = 0;
-  // Switch to lesson page
-  document.getElementById('home-page').style.display = 'none';
-  document.getElementById('lesson-page').style.display = 'block';
-  // Render
+  current = idx;
+  lessonStep = 0;
+  document.getElementById('hero').classList.remove('visible');
   const lv = document.getElementById('lesson-view');
   lv.classList.remove('visible');
   setTimeout(() => {
@@ -1206,8 +1257,19 @@ function openLesson(idx) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, 40);
   document.querySelectorAll('.sb-item').forEach((el, i) => el.classList.toggle('active', i === idx));
+  buildTopSteps();
   if (window.innerWidth <= 860) closeSidebar();
   if (typeof updateAICtx === 'function') updateAICtx();
+}
+
+function showHero() {
+  current = -1;
+  lessonStep = 0;
+  document.getElementById('lesson-view').classList.remove('visible');
+  document.getElementById('hero').classList.add('visible');
+  document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('active'));
+  buildTopSteps();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ── RENDER LESSON ──────────────────────────────────────────────
@@ -1248,9 +1310,9 @@ function renderLesson(idx) {
       ${l.content}
       <div class="step-nav">
         ${idx > 0
-          ? `<button class="s-btn" onclick="openLesson(${idx-1})">← Prev lesson</button>`
-          : `<button class="s-btn" onclick="showHome()">← Home</button>`}
-        <button class="s-btn primary" onclick="goStep(1)">
+          ? `<button class="step-btn" onclick="openLesson(${idx-1})">← Prev lesson</button>`
+          : `<button class="step-btn" onclick="showHero()">← Home</button>`}
+        <button class="step-btn primary" onclick="goStep(1)">
           Practice →
         </button>
       </div>
@@ -1259,33 +1321,33 @@ function renderLesson(idx) {
     <!-- STEP 2: PRACTICE -->
     <div class="step-panel" id="step-1">
       <div class="editor-block">
-        <div class="ed-topbar">
+        <div class="editor-topbar">
           <div class="ed-dots">
-            <div class="ed-dot dot-r"></div>
-            <div class="ed-dot dot-y"></div>
-            <div class="ed-dot dot-g"></div>
+            <div class="ed-dot ed-dot-r"></div>
+            <div class="ed-dot ed-dot-y"></div>
+            <div class="ed-dot ed-dot-g"></div>
           </div>
-          <span class="ed-title">index.html — live editor</span>
-          <button class="ed-run" onclick="runPreview()">▶ Run</button>
+          <span class="ed-file">index.html — live editor</span>
+          <button class="ed-run-btn" onclick="runPreview()">▶ Run</button>
         </div>
-        <div class="ed-tabs-mob" style="display:none">
-          <button class="ed-tab-m active" id="etab-code" onclick="switchEdTab('code')">CODE</button>
+        <div class="editor-tabs-mobile" style="display:none">
+          <button class="ed-tab-btn active" id="etab-code" onclick="switchEdTab('code')">CODE</button>
           <button class="ed-tab-btn" id="etab-prev" onclick="switchEdTab('preview')">PREVIEW</button>
         </div>
-        <div class="ed-body">
+        <div class="editor-body">
           <div class="ed-pane active-pane" id="ep-code">
-            <div class="ed-pane-lbl">code</div>
-            <textarea class="code-ta" id="code-editor" spellcheck="false">${escapedCode}</textarea>
+            <div class="ed-pane-label">code</div>
+            <textarea class="code-textarea" id="code-editor" spellcheck="false">${escapedCode}</textarea>
           </div>
           <div class="ed-pane" id="ep-prev">
-            <div class="ed-pane-lbl">preview</div>
-            <iframe class="prev-frame" id="preview-frame"></iframe>
+            <div class="ed-pane-label">preview</div>
+            <iframe class="preview-iframe" id="preview-frame"></iframe>
           </div>
         </div>
       </div>
       <div class="step-nav" style="margin-top:20px">
-        <button class="s-btn" onclick="goStep(0)">← Back to Learn</button>
-        <button class="s-btn primary" onclick="goStep(2)">Take Quiz →</button>
+        <button class="step-btn" onclick="goStep(0)">← Back to Learn</button>
+        <button class="step-btn primary" onclick="goStep(2)">Take Quiz →</button>
       </div>
     </div>
 
@@ -1296,37 +1358,37 @@ function renderLesson(idx) {
           <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="currentColor"/></svg>
           Quick Check — Lesson ${idx+1}
         </div>
-        <div class="quiz-q">${l.quiz.q.replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
-        <div class="quiz-opts" id="quiz-opts">
+        <div class="quiz-q-text">${l.quiz.q.replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+        <div class="quiz-options" id="quiz-opts">
           ${l.quiz.opts.map((o,i) => `
             <div class="quiz-opt" onclick="answerQuiz(${i},${l.quiz.ans},this)">
               <div class="quiz-opt-letter">${String.fromCharCode(65+i)}</div>
               ${o.replace(/&lt;/g,'<').replace(/&gt;/g,'>')}
             </div>`).join('')}
         </div>
-        <div class="quiz-fb" id="quiz-fb"></div>
+        <div class="quiz-feedback" id="quiz-fb"></div>
       </div>
       <div class="step-nav" style="margin-top:20px">
-        <button class="s-btn" onclick="goStep(1)">← Back to Practice</button>
-        <button class="mark-btn ${isDone?'done':''}" id="mark-btn" onclick="markDone(${idx})">
+        <button class="step-btn" onclick="goStep(1)">← Back to Practice</button>
+        <button class="mark-done-btn ${isDone?'done':''}" id="mark-btn" onclick="markDone(${idx})">
           ${isDone ? '✓ Completed' : '○ Mark complete'}
         </button>
         ${idx < lessons.length-1
-          ? `<button class="s-btn primary" onclick="openLesson(${idx+1})">Next Lesson →</button>`
-          : `<button class="s-btn primary" onclick="showHome()">🎉 Finish!</button>`}
+          ? `<button class="step-btn primary" onclick="openLesson(${idx+1})">Next Lesson →</button>`
+          : `<button class="step-btn primary" onclick="showHero()">🎉 Finish!</button>`}
       </div>
     </div>
 
     <div class="lesson-nav">
       ${idx > 0
-        ? `<button class="l-btn" onclick="openLesson(${idx-1})">← Previous</button>`
-        : `<button class="l-btn" onclick="showHome()">← Home</button>`}
-      <button class="mark-btn ${isDone?'done':''}" id="mark-btn2" onclick="markDone(${idx})">
+        ? `<button class="lesson-nav-btn" onclick="openLesson(${idx-1})">← Previous</button>`
+        : `<button class="lesson-nav-btn" onclick="showHero()">← Home</button>`}
+      <button class="mark-done-btn ${isDone?'done':''}" id="mark-btn2" onclick="markDone(${idx})">
         ${isDone ? '✓ Completed' : '○ Mark complete'}
       </button>
       ${idx < lessons.length-1
-        ? `<button class="l-btn primary" onclick="openLesson(${idx+1})">Next →</button>`
-        : `<button class="l-btn primary" onclick="showHome()">🎉 Finish!</button>`}
+        ? `<button class="lesson-nav-btn primary" onclick="openLesson(${idx+1})">Next →</button>`
+        : `<button class="lesson-nav-btn primary" onclick="showHero()">🎉 Finish!</button>`}
     </div>
   `;
 
@@ -1404,11 +1466,11 @@ function markDone(idx) {
   });
   document.getElementById('nav-'+idx)?.classList.add('done');
   updateProgress();
-  // buildTopSteps removed
+  buildTopSteps();
 }
 
 // Init
-// buildTopSteps removed
+buildTopSteps();
 updateProgress();
 
 // ── AI TUTOR ────────────────────────────────────────────────────
